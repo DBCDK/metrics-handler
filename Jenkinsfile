@@ -6,12 +6,15 @@ pipeline {
 	agent {label workerNode}
 	options {
 		buildDiscarder(logRotator(artifactDaysToKeepStr: "",
-            artifactNumToKeepStr: "", daysToKeepStr: "30", numToKeepStr: "30"))
-        timestamps()
+			artifactNumToKeepStr: "", daysToKeepStr: "30", numToKeepStr: "30"))
+		timestamps()
+	}
+	triggers {
+		githubPush()
 	}
 	tools {
-        maven "Maven 3"
-    }
+		maven "Maven 3"
+	}
 	stages {
 		stage("clear workspace") {
 			steps {
