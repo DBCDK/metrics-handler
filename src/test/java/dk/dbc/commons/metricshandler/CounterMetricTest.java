@@ -33,24 +33,6 @@ class CounterMetricTest {
         assertThrows(IllegalArgumentException.class, () -> new CounterMetricImpl(metadata));
     }
 
-    enum AppCounterMetrics implements CounterMetric {
-        APP_COUNTER_1(Metadata.builder()
-                .withName("first counter")
-                .withType(MetricType.COUNTER)
-                .build());
-
-        private final Metadata metadata;
-
-        AppCounterMetrics(Metadata metadata) {
-            this.metadata = validateMetadata(metadata);
-        }
-
-        @Override
-        public Metadata getMetadata() {
-            return metadata;
-        }
-    }
-
     private static class CounterMetricImpl implements CounterMetric {
         private final Metadata metadata;
 
