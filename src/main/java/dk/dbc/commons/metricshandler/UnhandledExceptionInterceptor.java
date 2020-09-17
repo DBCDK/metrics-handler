@@ -14,20 +14,7 @@ import javax.interceptor.InvocationContext;
  * Interceptor capable of incrementing a counter metric each time a business
  * method results in an exception being thrown.
  * <p>
- * Include the interceptor by adding:
- * </p>
- * <pre>
- * {@literal <}interceptors>
- *   {@literal <}class>
- *       dk.dbc.commons.metricshandler.UnhandledExceptionInterceptor
- *   {@literal <}/class>
- * {@literal <}/interceptors>
- * </pre>
- * <p>
- * to your beans.xml file.
- * </p>
- * <p>
- * Then annotate your business methods to be monitored with {@literal @}ExceptionMonitored(QUALIFIED_NAME).
+ * Annotate your business methods to be monitored with {@literal @}ExceptionMonitored(QUALIFIED_NAME).
  * QUALIFIED_NAME must identify a class or enum constant implementing the {@link CounterMetric} interface.
  * </p>
  * <p>
