@@ -10,7 +10,7 @@ pipeline {
 		timestamps()
 	}
 	triggers {
-		githubPush()
+		pollSCM("")
 	}
 	tools {
 		maven "Maven 3"

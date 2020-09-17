@@ -51,6 +51,41 @@ metricsHandler.increment(AppCounterMetrics.APP_COUNTER_1,
 
 ```
 
+Also available in this library is a special CDI interceptor capable of
+incrementing a counter metric each time a monitored business method results in
+an exception being thrown.
+
+Include the interceptor by including the following in your beans.xml file:
+
+```xml
+<interceptors>
+  <class>dk.dbc.commons.metricshandler.UnhandledExceptionInterceptor</class>
+</interceptors>
+```
+
+Then annotate your business methods to be monitored with @ExceptionMonitored(QUALIFIED_NAME),
+where QUALIFIED_NAME is a string identifying a class or enum constant
+implementing the CounterMetric} interface.
+
+```java
+public class SomeCdiOrEjbBean {
+    @ExceptionMonitored("fully.qualified.class.name.of.SomeCounterMetricsImpl")
+    public void someBusinessMethod() {
+        //...
+    }
+ 
+    @ExceptionMonitored("fully.qualified.name.for.SomeCounterMetricsImplEnum.ENUM_CONSTANT")
+    public void someOtherBusinessMethod() {
+        //...
+    }
+}
+```
+Be advised that the @ExceptionMonitored annotation will not work on a
+message-drive-bean's onMessage() method since MDBs are not strictly speaking
+CDI beans. In these cases you should instead extend UnhandledExceptionInterceptor
+and override the 'String getValue(InvocationContext invocationContext)' method
+to return a hard-coded value. The specialized interceptor can then be attached
+using the @Interceptors annotation on the MDB class.
 
 ### development
 
