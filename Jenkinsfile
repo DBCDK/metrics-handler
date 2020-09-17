@@ -9,6 +9,9 @@ pipeline {
 			artifactNumToKeepStr: "", daysToKeepStr: "30", numToKeepStr: "30"))
 		timestamps()
 	}
+	triggers {
+		pollSCM("")
+	}
 	tools {
 		maven "Maven 3"
 	}
