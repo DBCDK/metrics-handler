@@ -9,9 +9,6 @@ pipeline {
 			artifactNumToKeepStr: "", daysToKeepStr: "30", numToKeepStr: "30"))
 		timestamps()
 	}
-	triggers {
-		githubPush()
-	}
 	tools {
 		maven "Maven 3"
 	}
