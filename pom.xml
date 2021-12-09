@@ -11,13 +11,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>dbc-commons-metrics-handler</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <name>dbc-commons-metrics-handler</name>
 
   <parent>
     <groupId>dk.dbc</groupId>
-    <artifactId>super-pom</artifactId>
-    <version>master-SNAPSHOT</version>
+    <artifactId>microservice-pom</artifactId>
+    <version>latest-SNAPSHOT</version>
     <relativePath></relativePath>
   </parent>
 
@@ -25,31 +25,26 @@
     <dependency>
       <groupId>jakarta.platform</groupId>
       <artifactId>jakarta.jakartaee-api</artifactId>
-      <version>8.0.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.microprofile.metrics</groupId>
       <artifactId>microprofile-metrics-api</artifactId>
-      <version>2.3</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.6.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.6.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
-      <version>2.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
