@@ -1,6 +1,6 @@
 #!groovy
 
-def workerNode = "devel10"
+def workerNode = "devel11"
 
 pipeline {
 	agent {label workerNode}
@@ -10,7 +10,13 @@ pipeline {
 		timestamps()
 	}
 	tools {
+		jdk 'jdk11'
 		maven "Maven 3"
+	}
+	triggers {
+		pollSCM("H/03 * * * *")
+		upstream(upstreamProjects: "Docker-payara6-bump-trigger",
+				threshold: hudson.model.Result.SUCCESS)
 	}
 	stages {
 		stage("clear workspace") {
@@ -19,30 +25,24 @@ pipeline {
 				checkout scm
 			}
 		}
-		stage("verify") {
+		stage("Maven build") {
 			steps {
-				sh "mvn verify pmd:pmd javadoc:aggregate"
-				junit "target/surefire-reports/TEST-*.xml"
-			}
-		}
-		stage("warnings") {
-			agent {label workerNode}
-			steps {
-				warnings consoleParsers: [
-					[parserName: "Java Compiler (javac)"],
-					[parserName: "JavaDoc Tool"]
-				],
-					unstableTotalAll: "0",
-					failedTotalAll: "0"
-			}
-		}
-		stage("pmd") {
-			agent {label workerNode}
-			steps {
-				step([$class: 'hudson.plugins.pmd.PmdPublisher',
-					  pattern: 'target/pmd.xml',
-					  unstableTotalAll: "0",
-					  failedTotalAll: "0"])
+				sh "mvn verify pmd:pmd pmd:cpd spotbugs:spotbugs"
+
+				junit testResults: '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml'
+
+				script {
+					def java = scanForIssues tool: [$class: 'Java']
+					publishIssues issues: [java], unstableTotalAll:1
+
+					def pmd = scanForIssues tool: [$class: 'Pmd']
+					publishIssues issues: [pmd], unstableTotalAll:1
+
+					// spotbugs still has some outstanding issues with regard
+					// to analyzing Java 11 bytecode.
+					// def spotbugs = scanForIssues tool: [$class: 'SpotBugs']
+					// publishIssues issues:[spotbugs], unstableTotalAll:1
+				}
 			}
 		}
 		stage("deploy") {
