@@ -1,14 +1,11 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GNU GPLv3
- * See license text in LICENSE.txt
- */
-
 package dk.dbc.commons.metricshandler;
 
-import javax.inject.Inject;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
+import jakarta.inject.Inject;
+import jakarta.interceptor.AroundInvoke;
+import jakarta.interceptor.Interceptor;
+import jakarta.interceptor.InvocationContext;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Interceptor capable of incrementing a counter metric each time a business
@@ -50,13 +47,14 @@ public class UnhandledExceptionInterceptor {
     }
 
     private void incrementMetric(InvocationContext invocationContext)
-            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException,
+            InvocationTargetException {
         final String value = getValue(invocationContext);
 
         // First assume value represents a class name
         try {
             final Class<?> aClass = Class.forName(value);
-            metricsHandler.increment((CounterMetric)aClass.newInstance());
+            metricsHandler.increment((CounterMetric) aClass.getDeclaredConstructor().newInstance());
             return;
         } catch (ClassNotFoundException ignored) {}
 
