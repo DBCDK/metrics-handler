@@ -1,6 +1,6 @@
 #!groovy
 
-def workerNode = "devel11"
+def workerNode = "devel13"
 
 pipeline {
 	agent {label workerNode}
@@ -8,10 +8,6 @@ pipeline {
 		buildDiscarder(logRotator(artifactDaysToKeepStr: "",
 			artifactNumToKeepStr: "", daysToKeepStr: "30", numToKeepStr: "30"))
 		timestamps()
-	}
-	tools {
-		jdk 'jdk11'
-		maven "Maven 3"
 	}
 	triggers {
 		pollSCM("H/03 * * * *")
@@ -27,7 +23,7 @@ pipeline {
 		}
 		stage("Maven build") {
 			steps {
-				sh "mvn verify pmd:pmd pmd:cpd spotbugs:spotbugs"
+				sh "mvn -Dmaven.repo.local=\$WORKSPACE/.repo verify pmd:pmd pmd:cpd spotbugs:spotbugs"
 
 				junit testResults: '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml'
 
@@ -50,7 +46,7 @@ pipeline {
 				branch "master"
 			}
 			steps {
-				sh "mvn jar:jar deploy:deploy"
+				sh "mvn -Dmaven.repo.local=\$WORKSPACE/.repo --no-transfer-progress -Dmaven.test.skip=true deploy"
 			}
 		}
 	}
