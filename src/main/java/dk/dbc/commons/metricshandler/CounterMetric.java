@@ -6,16 +6,8 @@
 package dk.dbc.commons.metricshandler;
 
 import org.eclipse.microprofile.metrics.Metadata;
-import org.eclipse.microprofile.metrics.MetricType;
 
 @FunctionalInterface
 public interface CounterMetric {
-    default Metadata validateMetadata(Metadata metadata) {
-        if (metadata.getTypeRaw() != MetricType.COUNTER) {
-            throw new IllegalArgumentException(
-                    "Metric " + metadata.getName() + " is not of type " + MetricType.COUNTER);
-        }
-        return metadata;
-    }
     Metadata getMetadata();
 }

@@ -43,6 +43,6 @@ public class MetricsHandlerBean {
      * @param tags Optional tags to attach to the metric
      */
     public void update(SimpleTimerMetric metric, Duration duration, Tag... tags) {
-         metricRegistry.simpleTimer(metric.getMetadata(), tags).update(duration);
+         metricRegistry.timer(metric.getMetadata(), tags).update(duration);
     }
 }
